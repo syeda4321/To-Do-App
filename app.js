@@ -2,46 +2,36 @@ let addTask = document.getElementById("addTask");
 let task = document.getElementById("task");
 let list = document.getElementById("list");
 
-let currentEditing = null; // edit ke liye track
+let editTaskElement = null; // yahan hum store karenge kon sa task edit ho raha hai
 
 addTask.addEventListener("click", () => {
-  let taskValue = task.value.trim();
+  if (addTask.innerHTML == "Add Task") {
 
-  if (taskValue === "") {
-    alert("Please enter a task!");
-    return;
-  }
+    list.innerHTML += `<div class="main">
+      <li>${task.value}</li> 
+      <div> 
+        <button onclick="edit(this)">Edit</button> 
+        <button onclick="del(this)">Delete</button>
+      </div> 
+    </div>`;
 
-  // Add Task
-  if (addTask.innerHTML === "Add Task") {
-    list.innerHTML += `
-      <div class="main">
-        <li>${taskValue}</li>
-        <div>
-          <button onclick="edit(this)">Edit</button>
-          <button onclick="del(this)">Delete</button>
-        </div>
-      </div>
-    `;
-  } 
-  
-  // Save Edited Task
-  else {
-    currentEditing.innerText = taskValue;
+    task.value = "";
+
+  } else {
+    // Save mode me update hoga
+    editTaskElement.innerHTML = task.value;
+    task.value = "";
     addTask.innerHTML = "Add Task";
   }
-
-  task.value = "";
 });
 
-// Edit Function
 function edit(element) {
-  currentEditing = element.parentNode.parentNode.querySelector("li");
-  task.value = currentEditing.innerText;
+  // jis task ko edit karna hai uska li element pakro
+  editTaskElement = element.parentNode.parentNode.querySelector("li");
+  task.value = editTaskElement.innerHTML;
   addTask.innerHTML = "Save";
 }
 
-// Delete Function
 function del(element) {
   element.parentNode.parentNode.remove();
 }
